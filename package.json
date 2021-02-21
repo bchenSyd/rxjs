@@ -16,16 +16,20 @@
   "lint-staged": {
     "*.js": "eslint --cache --fix",
     "(src|spec)/**/*.ts": [
-      "tslint --fix",
-      "prettier --write"
+      "echo tslint --fix",
+      "echo prettier --write"
     ],
     "*.{js,css,md}": "prettier --write"
   },
   "scripts": {
-    "test-only":"mocha --require ts-node/register --config spec/support/.mocharc.js  spec/operators/takeUntil-spec.ts",
+    "build:clean": "shx rm -rf ./dist",
+    "compile": "npm run build:clean &&tsc -b  ./src/tsconfig.cjs.spec.json ./spec/tsconfig.json",
+    "test":"mocha  -r ts-node/register --config spec/support/.mocharc.js spec/operators/takeUntil-spec.ts",
+    "debug":"mocha  -r ts-node/register --config spec/support/.mocharc.js  --inspect-brk spec/operators/takeUntil-spec.ts",
     "changelog": "npx conventional-changelog-cli -p angular -i CHANGELOG.md -s",
-    "//":"// this is to control commit message",
+    "/////////////////////////////////////////////////////////////////":"// this is to control commit message",
     "commitmsg": "validate-commit-msg", 
+    "//////////////////////////////////////////////////////////////":"",
     "build:spec:browser": "echo \"Browser test is not working currently\" && exit -1 && webpack --config spec/support/webpack.mocha.config.js",
     "lint_spec": "tslint -c spec/tslint.json -p spec/tsconfig.json \"spec/**/*.ts\"",
     "lint_src": "tslint -c tslint.json -p src/tsconfig.base.json \"src/**/*.ts\"",
@@ -33,15 +37,13 @@
     "dtslint": "tsc -b ./src/tsconfig.types.json && tslint -c spec-dtslint/tslint.json -p spec-dtslint/tsconfig.json \"spec-dtslint/**/*.ts\"",
     "prepublishOnly": "npm run build:package && npm run lint && npm run test && npm run test:circular && npm run dtslint && npm run test:side-effects && npm run api_guardian",
     "publish_docs": "./publish_docs.sh",
-    "test": "npm run compile && mocha --config spec/support/.mocharc.js \"dist/spec/**/*-spec.js\"",
+    "test:all": "npm run compile && mocha --config spec/support/.mocharc.js \"dist/spec/**/*-spec.js\"",
     "test:browser": "echo \"Browser test is not working currently\" && exit -1 && npm-run-all build:spec:browser && opn spec/support/mocha-browser-runner.html",
     "test:circular": "dependency-cruiser --validate .dependency-cruiser.json -x \"^node_modules\" dist/esm5",
     "test:systemjs": "node integration/systemjs/systemjs-compatibility-spec.js",
     "test:side-effects": "check-side-effects --test integration/side-effects/side-effects.json",
     "test:side-effects:update": "npm run test:side-effects -- --update",
     "test:import": "ts-node ./integration/import/runner.ts",
-    "compile": "tsc -b ./src/tsconfig.cjs.json ./src/tsconfig.cjs.spec.json ./src/tsconfig.esm.json ./src/tsconfig.esm5.json ./src/tsconfig.esm5.rollup.json ./src/tsconfig.types.json ./spec/tsconfig.json",
-    "build:clean": "shx rm -rf ./dist",
     "build:global": "node ./tools/make-umd-bundle.js && node ./tools/make-closure-core.js",
     "build:package": "npm-run-all build:clean compile build:global && node ./tools/prepare-package.js && node ./tools/generate-alias.js",
     "api_guardian:update": "tsc -b ./src/tsconfig.types.json && ts-api-guardian --outDir api_guard dist/types/index.d.ts dist/types/ajax/index.d.ts dist/types/fetch/index.d.ts dist/types/operators/index.d.ts dist/types/testing/index.d.ts dist/types/webSocket/index.d.ts",

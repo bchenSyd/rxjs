@@ -4,7 +4,8 @@ import { of, EMPTY } from 'rxjs';
 
 /** @test {takeUntil} */
 describe('takeUntil operator', () => {
-  it('should take values until notifier emits', () => {
+  it.only('should take values until notifier emits', () => {
+    debugger;
     const e1 =     hot('--a--b--c--d--e--f--g--|');
     const e1subs =     '^            !          ';
     const e2 =     hot('-------------z--|       ');

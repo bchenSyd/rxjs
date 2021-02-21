@@ -44,7 +44,17 @@ import { noop } from '../util/noop';
  */
 export function takeUntil<T>(notifier: ObservableInput<any>): MonoTypeOperatorFunction<T> {
   return operate((source, subscriber) => {
-    innerFrom(notifier).subscribe(new OperatorSubscriber(subscriber, () => subscriber.complete(), undefined, noop));
+    innerFrom(notifier).subscribe(
+      new OperatorSubscriber(
+        subscriber,
+        () => {
+          debugger;
+          subscriber.complete();
+        },
+        undefined,
+        noop
+      )
+    );
     !subscriber.closed && source.subscribe(subscriber);
   });
 }
