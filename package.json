@@ -8,7 +8,8 @@
   "types": "./dist/types/index.d.ts",
   "sideEffects": false,
   "config": {
-    "commitizen": {
+    "//":"// nothing to do with commit message; changelog only",
+    "commitizen": { 
       "path": "cz-conventional-changelog"
     }
   },
@@ -23,7 +24,8 @@
   "scripts": {
     "test-only":"mocha --require ts-node/register --config spec/support/.mocharc.js  spec/operators/takeUntil-spec.ts",
     "changelog": "npx conventional-changelog-cli -p angular -i CHANGELOG.md -s",
-    "commitmsg": "validate-commit-msg",
+    "//":"// this is to control commit message",
+    "commitmsg": "validate-commit-msg", 
     "build:spec:browser": "echo \"Browser test is not working currently\" && exit -1 && webpack --config spec/support/webpack.mocha.config.js",
     "lint_spec": "tslint -c spec/tslint.json -p spec/tsconfig.json \"spec/**/*.ts\"",
     "lint_src": "tslint -c tslint.json -p src/tsconfig.base.json \"src/**/*.ts\"",
